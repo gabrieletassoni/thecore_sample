@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      - ..:/workspaces/project/backend:cached
+      - tmp:/workspaces/project/backend/tmp
+      - bundle:/workspaces/project/backend/vendor/bundle
+      - ${HOME}/.bundle/config:/home/vscode/.bundle/config
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:db
+    environment:
+      REDIS_URL: redis://db:6379/1
+      DATABASE_URL: postgres://postgres:postgres@db:5432/mytrack_dev?pool=5
+
+    # Uncomment the next line to use a non-root user for all processes.
+    # user: vscode
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    command: redis-server
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:db
+    healthcheck: 
+      interval: 1s
+      retries: 30
+      test: "redis-cli ping"
+      timeout: 3s
+
+
+  db:
+    # One might assume that using postgres:15 as their tag would accomplish soft-pinning to avoid breaking changes. However, what occurred in the past few days was that 15 moved from 15-bullseye to 15-bookworm. This creates a breaking change because postgres does not provide its own collations -- it uses collations from the base OS, which were upgraded with Debian's change from bullseye to bookworm.
+    # The takeaway is that if you actually want soft-pinning without breaking changes, you need to pin not only the postgres major version, but also the operating system, i.e. postgres:15-bookworm.
+    image: postgres:15-bookworm
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./create-db-user.sql:/docker-entrypoint-initdb.d/create-db-user.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+
+    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+volumes:
+  postgres-data:
+  node-modules:
+  tmp:
+  bundle:

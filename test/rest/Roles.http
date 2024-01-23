@@ -1,0 +1,67 @@
+# @import ./Auth JWT.http
+
+@url={{BASE_URL}}role
+{{+
+    exports.commonHeaders = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+}}
+
+###
+# @name getAllRoles
+# @forceRef authentication
+GET {{url}}
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @name getOneRole
+# @ref getAllRoles
+GET {{url}}/{{getAllRoles[0].id}}
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @name createRole
+# @forceRef authentication
+POST {{url}}
+...commonHeaders
+Authorization: Bearer {{token}}
+
+{
+    "role": {
+        "name": "pzu"
+    }
+}
+
+###
+# @name updateRole
+PUT {{url}}/11
+...commonHeaders
+Authorization: Bearer {{token}}
+
+{
+    "role": {
+        "name": "pzu2"
+    }
+}
+
+###
+# @name patchRole
+PATCH {{url}}/11
+...commonHeaders
+Authorization: Bearer {{token}}
+
+{
+    "role": {
+        "name": "pz3"
+    }
+}
+
+###
+# @name deleteRole
+DELETE {{url}}/11
+...commonHeaders
+Authorization: Bearer {{token}}
+

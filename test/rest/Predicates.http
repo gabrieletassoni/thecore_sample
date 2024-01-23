@@ -1,0 +1,67 @@
+# @import ./Auth JWT.http
+
+@url={{BASE_URL}}predicate
+{{+
+    exports.commonHeaders = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+}}
+
+###
+# @name getAllPredicates
+# @ref authentication
+GET {{url}}
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @name getOnePredicate
+# @ref getAllPredicates
+GET {{url}}/{{getAllPredicates[0].id}}
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @name createPredicate
+# @forceRef authentication
+POST {{url}}
+...commonHeaders
+Authorization: Bearer {{token}}
+
+{
+    "predicate": {
+        "name": "pzu"
+    }
+}
+
+###
+# @name updatePredicate
+PUT {{url}}/11
+...commonHeaders
+Authorization: Bearer {{token}}
+
+{
+    "predicate": {
+        "name": "pzu2"
+    }
+}
+
+###
+# @name patchPredicate
+PATCH {{url}}/11
+...commonHeaders
+Authorization: Bearer {{token}}
+
+{
+    "predicate": {
+        "name": "pz3"
+    }
+}
+
+###
+# @name deletePredicate
+DELETE {{url}}/11
+...commonHeaders
+Authorization: Bearer {{token}}
+

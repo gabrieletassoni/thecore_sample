@@ -1,0 +1,20 @@
+// @name authentication
+POST {{BASE_URL}}authenticate
+Content-Type:application/json
+Accept:application/json
+
+{
+	"auth": {
+		"email": "{{EMAIL}}",
+		"password": "{{PASSWORD}}"
+	}
+}
+
+{{@response
+  // Response headers must be exported lithe this, 
+  // otherwise they will be ignored
+  // Response body does not need to be exported, it will be accessible 
+  // in later .http files, i.e. {{authentication.created_at}}
+  exports.token = response.headers['token'];
+}}
+

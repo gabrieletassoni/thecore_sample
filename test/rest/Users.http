@@ -1,0 +1,67 @@
+# @import ./Auth JWT.http
+
+@url={{BASE_URL}}user
+{{+
+    exports.commonHeaders = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+}}
+
+###
+# @name getAllUsers
+# @forceRef authentication
+GET {{url}}
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @name getOneUser
+# @ref getAllUsers
+GET {{url}}/{{getAllUsers[0].id}}
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @name createUser
+# @forceRef authentication
+POST {{url}}
+...commonHeaders
+Authorization: Bearer {{token}}
+
+{
+    "user": {
+        "name": "pzu"
+    }
+}
+
+###
+# @name updateUser
+PUT {{url}}/11
+...commonHeaders
+Authorization: Bearer {{token}}
+
+{
+    "user": {
+        "name": "pzu2"
+    }
+}
+
+###
+# @name patchUser
+PATCH {{url}}/11
+...commonHeaders
+Authorization: Bearer {{token}}
+
+{
+    "user": {
+        "name": "pz3"
+    }
+}
+
+###
+# @name deleteUser
+DELETE {{url}}/11
+...commonHeaders
+Authorization: Bearer {{token}}
+

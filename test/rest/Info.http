@@ -1,0 +1,45 @@
+# @import ./Auth JWT.http
+
+@url={{BASE_URL}}info
+{{+
+    exports.commonHeaders = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+}}
+
+###
+# @ref authentication
+GET {{url}}/version HTTP/1.1
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @ref authentication
+GET {{url}}/schema HTTP/1.1
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @ref authentication
+GET {{url}}/roles HTTP/1.1
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @ref authentication
+GET {{url}}/dsl HTTP/1.1
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @ref authentication
+GET {{url}}/translations HTTP/1.1
+...commonHeaders
+Authorization: Bearer {{token}}
+
+###
+# @ref authentication
+GET {{url}}/settings HTTP/1.1
+...commonHeaders
+Authorization: Bearer {{token}}

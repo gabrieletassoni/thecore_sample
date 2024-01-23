@@ -72,3 +72,5 @@ gem 'cancancan'
 gem "sassc-rails"
 gem 'model_driven_api', '~> 3.0' #, path: 'vendor/submodules/model_driven_api'
 gem 'thecore_ui_rails_admin', '~> 3.0' #, path: 'vendor/submodules/thecore_ui_rails_admin'
+
+gem 'thecore_tcp_debug', '~> 3.0' #, path: 'vendor/submodules/thecore_tcp_debug'
